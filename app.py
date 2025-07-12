@@ -18,7 +18,9 @@ def home():
         )
         db.session.add(new_app)
         db.session.commit()
-        return redirect("/")  # Refresh to prevent form resubmission
+        return redirect("/")
+
+    # FILTER LOGIC (GET request)
     query = Application.query
     keyword = request.args.get("q", "").strip()
     status = request.args.get("status", "").strip()
@@ -30,10 +32,10 @@ def home():
         )
     if status:
         query = query.filter(Application.status == status)
-        
-    applications = Application.query.all()
+
+    applications = query.all()
     return render_template("home.html", applications=applications)
-    
+
 @app.route("/edit/<int:id>", methods=["GET", "POST"])
 def edit(id):
     app_to_edit = Application.query.get_or_404(id)

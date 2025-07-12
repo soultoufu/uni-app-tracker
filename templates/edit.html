@@ -10,7 +10,12 @@
     <form method="POST">
         <input class="form-control my-2" name="university" value="{{ app.university }}" required>
         <input class="form-control my-2" name="course" value="{{ app.course }}" required>
-        <input class="form-control my-2" name="status" value="{{ app.status }}">
+        <select class="form-select my-2" name="status">
+            <option value="Submitted" {% if app.status == "Submitted" %}selected{% endif %}>Submitted</option>
+            <option value="Interview" {% if app.status == "Interview" %}selected{% endif %}>Interview</option>
+            <option value="Accepted" {% if app.status == "Accepted" %}selected{% endif %}>Accepted</option>
+            <option value="Rejected" {% if app.status == "Rejected" %}selected{% endif %}>Rejected</option>
+        </select>        
         <input class="form-control my-2" name="deadline" value="{{ app.deadline }}">
         <textarea class="form-control my-2" name="notes">{{ app.notes }}</textarea>
 

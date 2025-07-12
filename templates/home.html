@@ -6,7 +6,7 @@
 </head>
 <body class="container mt-4">
     <h1>University Application Tracker</h1>
-    
+
     <form method="GET" class="row g-2 mb-4">
         <div class="col-md-4">
             <input type="text" class="form-control" name="q" placeholder="Search university or course" value="{{ request.args.get('q', '') }}">
@@ -29,7 +29,13 @@
     <form method="POST" class="my-4">
         <input class="form-control my-2" name="university" placeholder="University Name" required>
         <input class="form-control my-2" name="course" placeholder="Course Name" required>
-        <input class="form-control my-2" name="status" placeholder="Status (e.g., Submitted, Interview)">
+        <select class="form-select my-2" name="status">
+            <option value="">Select status</option>
+            <option value="Submitted">Submitted</option>
+            <option value="Interview">Interview</option>
+            <option value="Accepted">Accepted</option>
+            <option value="Rejected">Rejected</option>
+        </select>        
         <input class="form-control my-2" name="deadline" placeholder="Deadline (DD-MM-YYYY)">
         <textarea class="form-control my-2" name="notes" placeholder="Notes"></textarea>
         <button class="btn btn-primary">Add Application</button>
