@@ -13,7 +13,9 @@ def home():
             university=request.form["university"],
             course=request.form["course"],
             status=request.form["status"],
-            deadline=request.form["deadline"],
+            # Convert yyyy-mm-dd ➜ dd-mm-yyyy before storing
+            deadline_raw = request.form["deadline"],
+            deadline = "-".join(reversed(deadline_raw.split("-"))),
             notes=request.form["notes"]
         )
         db.session.add(new_app)
@@ -44,8 +46,18 @@ def edit(id):
         app_to_edit.university = request.form["university"]
         app_to_edit.course = request.form["course"]
         app_to_edit.status = request.form["status"]
-        app_to_edit.deadline = request.form["deadline"]
+
+        # Convert from yyyy-mm-dd (HTML input) to dd-mm-yyyy
+        deadline_raw = request.form["deadline"]  # e.g. "2025-10-15"
+        if deadline_raw:
+            parts = deadline_raw.split("-")
+            app_to_edit.deadline = f"{parts[2]}-{parts[1]}-{parts[0]}"  # "15-10-2025"
+        else:
+            app_to_edit.deadline = ""
+
         app_to_edit.notes = request.form["notes"]
+
+        
 
         db.session.commit()
         return redirect(url_for("home"))

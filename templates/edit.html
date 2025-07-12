@@ -16,7 +16,8 @@
             <option value="Accepted" {% if app.status == "Accepted" %}selected{% endif %}>Accepted</option>
             <option value="Rejected" {% if app.status == "Rejected" %}selected{% endif %}>Rejected</option>
         </select>        
-        <input class="form-control my-2" name="deadline" value="{{ app.deadline }}">
+        <input type="date" class="form-control my-2" name="deadline"
+       value="{{ app.deadline.split('-')[2] }}-{{ app.deadline.split('-')[1] }}-{{ app.deadline.split('-')[0] }}">
         <textarea class="form-control my-2" name="notes">{{ app.notes }}</textarea>
 
         <button class="btn btn-primary">Save Changes</button>
