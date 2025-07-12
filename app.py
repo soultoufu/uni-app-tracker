@@ -19,15 +19,21 @@ def home():
         db.session.add(new_app)
         db.session.commit()
         return redirect("/")  # Refresh to prevent form resubmission
+    query = Application.query
+    keyword = request.args.get("q", "").strip()
+    status = request.args.get("status", "").strip()
 
+    if keyword:
+        query = query.filter(
+            (Application.university.ilike(f"%{keyword}%")) |
+            (Application.course.ilike(f"%{keyword}%"))
+        )
+    if status:
+        query = query.filter(Application.status == status)
+        
     applications = Application.query.all()
     return render_template("home.html", applications=applications)
-
-from flask import Flask, render_template, request, redirect, url_for
-from models import db, Application
-
-# ... existing config and home route ...
-
+    
 @app.route("/edit/<int:id>", methods=["GET", "POST"])
 def edit(id):
     app_to_edit = Application.query.get_or_404(id)
