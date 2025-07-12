@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Application</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container mt-4">
+    <h2>Edit Application</h2>
+
+    <form method="POST">
+        <input class="form-control my-2" name="university" value="{{ app.university }}" required>
+        <input class="form-control my-2" name="course" value="{{ app.course }}" required>
+        <input class="form-control my-2" name="status" value="{{ app.status }}">
+        <input class="form-control my-2" name="deadline" value="{{ app.deadline }}">
+        <textarea class="form-control my-2" name="notes">{{ app.notes }}</textarea>
+
+        <button class="btn btn-primary">Save Changes</button>
+        <a href="/" class="btn btn-secondary">Cancel</a>
+    </form>
+</body>
+</html>

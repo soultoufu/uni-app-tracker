@@ -23,6 +23,34 @@ def home():
     applications = Application.query.all()
     return render_template("home.html", applications=applications)
 
+from flask import Flask, render_template, request, redirect, url_for
+from models import db, Application
+
+# ... existing config and home route ...
+
+@app.route("/edit/<int:id>", methods=["GET", "POST"])
+def edit(id):
+    app_to_edit = Application.query.get_or_404(id)
+
+    if request.method == "POST":
+        app_to_edit.university = request.form["university"]
+        app_to_edit.course = request.form["course"]
+        app_to_edit.status = request.form["status"]
+        app_to_edit.deadline = request.form["deadline"]
+        app_to_edit.notes = request.form["notes"]
+
+        db.session.commit()
+        return redirect(url_for("home"))
+
+    return render_template("edit.html", app=app_to_edit)
+
+@app.route("/delete/<int:id>")
+def delete(id):
+    app_to_delete = Application.query.get_or_404(id)
+    db.session.delete(app_to_delete)
+    db.session.commit()
+    return redirect(url_for("home"))
+
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
