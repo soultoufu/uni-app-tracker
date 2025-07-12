@@ -9,13 +9,17 @@ db.init_app(app)
 @app.route("/", methods=["GET", "POST"])
 def home():
     if request.method == "POST":
+        deadline_raw = request.form["deadline"]
+        deadline = ""
+        if deadline_raw:
+            parts = deadline_raw.split("-")  # ['2025', '10', '15']
+            deadline = f"{parts[2]}-{parts[1]}-{parts[0]}"  # '15-10-2025'
+
         new_app = Application(
             university=request.form["university"],
             course=request.form["course"],
             status=request.form["status"],
-            # Convert yyyy-mm-dd ➜ dd-mm-yyyy before storing
-            deadline_raw = request.form["deadline"],
-            deadline = "-".join(reversed(deadline_raw.split("-"))),
+            deadline=deadline,
             notes=request.form["notes"]
         )
         db.session.add(new_app)
