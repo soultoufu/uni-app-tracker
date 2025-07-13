@@ -23,12 +23,6 @@
         <div class="col-md-4">
             <input type="text" class="form-control" name="q" placeholder="Search university or course" value="{{ request.args.get('q', '') }}">
         </div>
-        <div class="col-md-4">
-            <select name="sort_by" class="form-select">
-                <option value="deadline" {% if request.args.get('sort_by') == 'deadline' %}selected{% endif %}>Sort by Deadline</option>
-                <option value="university" {% if request.args.get('sort_by') == 'university' %}selected{% endif %}>Sort by University</option>
-                <option value="course" {% if request.args.get('sort_by') == 'course' %}selected{% endif %}>Sort by Course</option>
-            </select>
         </div>
         <div class="col-md-4">
             <select name="status" class="form-select">
