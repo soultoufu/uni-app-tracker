@@ -24,6 +24,13 @@
             <input type="text" class="form-control" name="q" placeholder="Search university or course" value="{{ request.args.get('q', '') }}">
         </div>
         <div class="col-md-4">
+            <select name="sort_by" class="form-select">
+                <option value="deadline" {% if request.args.get('sort_by') == 'deadline' %}selected{% endif %}>Sort by Deadline</option>
+                <option value="university" {% if request.args.get('sort_by') == 'university' %}selected{% endif %}>Sort by University</option>
+                <option value="course" {% if request.args.get('sort_by') == 'course' %}selected{% endif %}>Sort by Course</option>
+            </select>
+        </div>
+        <div class="col-md-4">
             <select name="status" class="form-select">
                 <option value="">Filter by status</option>
                 <option value="Submitted" {% if request.args.get('status') == 'Submitted' %}selected{% endif %}>Submitted</option>
@@ -54,15 +61,31 @@
         <button class="btn btn-primary">Add Application</button>
     </form>
 
-    <!-- ✅ Delete All Button (ABOVE the applications list) -->
-    {% if applications|length > 0 %}
-    <div class="d-flex justify-content-end mb-2">
-        <form method="POST" action="/delete_all" onsubmit="return confirm('Are you sure you want to delete all applications?');">
-            <button class="btn btn-danger">🗑️ Delete All Applications</button>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+  
+        <!-- Sort Form -->
+        <form method="GET" class="d-flex align-items-center">
+          <label for="sort_by" class="me-2">Sort by:</label>
+          <select name="sort_by" class="form-select me-2" onchange="this.form.submit()">
+              <option value="deadline" {% if request.args.get('sort_by') == 'deadline' %}selected{% endif %}>Deadline</option>
+              <option value="university" {% if request.args.get('sort_by') == 'university' %}selected{% endif %}>University</option>
+              <option value="course" {% if request.args.get('sort_by') == 'course' %}selected{% endif %}>Course</option>
+          </select>
+      
+          <!-- Keep query and status filters if present -->
+          <input type="hidden" name="q" value="{{ request.args.get('q', '') }}">
+          <input type="hidden" name="status" value="{{ request.args.get('status', '') }}">
         </form>
-    </div>
-    {% endif %}
-
+      
+        <!-- Delete All Button -->
+        {% if applications|length > 0 %}
+        <form method="POST" action="/delete_all" onsubmit="return confirm('Are you sure you want to delete all applications?');">
+          <button class="btn btn-danger">🗑️ Delete All Applications</button>
+        </form>
+        {% endif %}
+      
+      </div>
+      
     <hr>
 
     <!-- ✅ List of Applications -->

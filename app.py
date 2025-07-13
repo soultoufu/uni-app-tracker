@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from models import db, Application
+from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = "f991sdf01sd-uni-tracker-2025"
@@ -41,6 +42,21 @@ def home():
         query = query.filter(Application.status == status)
 
     applications = query.all()
+
+    sort_by = request.args.get("sort_by", "deadline")
+
+    if sort_by == "university":
+        applications.sort(key=lambda x: x.university.lower())
+    elif sort_by == "course":
+        applications.sort(key=lambda x: x.course.lower())
+    else:  # default: deadline
+        def parse_deadline(app):
+            try:
+                return datetime.strptime(app.deadline, "%d-%m-%Y")
+            except:
+                return datetime.max
+        applications.sort(key=parse_deadline)
+
     return render_template("home.html", applications=applications)
 
 @app.route("/edit/<int:id>", methods=["GET", "POST"])
