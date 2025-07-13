@@ -1,7 +1,8 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for, flash
 from models import db, Application
 
 app = Flask(__name__)
+app.secret_key = "f991sdf01sd-uni-tracker-2025"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///applications.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
@@ -74,6 +75,14 @@ def delete(id):
     db.session.delete(app_to_delete)
     db.session.commit()
     return redirect(url_for("home"))
+
+@app.route("/delete_all", methods=["POST"])
+def delete_all():
+    Application.query.delete()
+    db.session.commit()
+    flash("All applications deleted.")
+    return redirect("/")
+
 
 if __name__ == "__main__":
     with app.app_context():
