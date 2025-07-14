@@ -2,11 +2,12 @@ from flask import Flask, make_response, render_template, request, redirect, url_
 from models import db, Application
 from datetime import datetime
 import csv
+import os
 from io import StringIO
 
 
 app = Flask(__name__)
-app.secret_key = "f991sdf01sd-uni-tracker-2025"
+app.secret_key = os.envrion.get("SECRET_KEY", "devkey")
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///applications.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
