@@ -86,11 +86,12 @@ def edit(id):
 
         # Convert from yyyy-mm-dd (HTML input) to dd-mm-yyyy
         deadline_raw = request.form["deadline"]  # e.g. "2025-10-15"
-        if deadline_raw:
+        try:
             parts = deadline_raw.split("-")
-            app_to_edit.deadline = f"{parts[2]}-{parts[1]}-{parts[0]}"  # "15-10-2025"
-        else:
-            app_to_edit.deadline = ""
+            deadline = f"{parts[2]}-{parts[1]}-{parts[0]}"
+        except Exception as e:
+            deadline = ""
+
 
         app_to_edit.notes = request.form["notes"]
 
@@ -130,9 +131,8 @@ def export():
     response.headers["Content-type"] = "text/csv"
     return response
 
-
-
 if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
-    app.run(debug=True)
+    if os.environ.get("FLASK_ENV") != "production":
+        with app.app_context():
+            db.create_all()
+        app.run(debug=True)
