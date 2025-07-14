@@ -72,11 +72,14 @@
         </form>
       
         <!-- Delete All Button -->
-        {% if applications|length > 0 %}
-        <form method="POST" action="/delete_all" onsubmit="return confirm('Are you sure you want to delete all applications?');">
-          <button class="btn btn-danger">🗑️ Delete All Applications</button>
-        </form>
-        {% endif %}
+        <div>
+            {% if applications|length > 0 %}
+            <a href="/export" class="btn btn-success me-2">📥 Export to CSV</a>
+            <form method="POST" action="/delete_all" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete all applications?');">
+                <button class="btn btn-danger">🗑️ Delete All</button>
+            </form>
+            {% endif %}
+        </div>
       
       </div>
       
@@ -84,6 +87,9 @@
 
     <!-- ✅ List of Applications -->
     {% for app in applications %}
+    {% if applications|length == 0 %}
+        <div class="alert alert-warning">No applications found. Try adjusting your filters.</div>
+    {% endif %}
     <div class="card my-2">
         <div class="card-body">
             <h5>{{ app.university }} — {{ app.course }}</h5>

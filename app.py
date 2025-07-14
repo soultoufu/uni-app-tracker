@@ -1,6 +1,9 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, make_response, render_template, request, redirect, url_for, flash
 from models import db, Application
 from datetime import datetime
+import csv
+from io import StringIO
+
 
 app = Flask(__name__)
 app.secret_key = "f991sdf01sd-uni-tracker-2025"
@@ -98,6 +101,22 @@ def delete_all():
     db.session.commit()
     flash("All applications deleted.")
     return redirect("/")
+
+@app.route("/export")
+def export():
+    output = StringIO()
+    writer = csv.writer(output)
+    writer.writerow(["University", "Course", "Status", "Deadline", "Notes"])
+
+    apps = Application.query.all()
+    for app in apps:
+        writer.writerow([app.university, app.course, app.status, app.deadline, app.notes])
+
+    response = make_response(output.getvalue())
+    response.headers["Content-Disposition"] = "attachment; filename=applications.csv"
+    response.headers["Content-type"] = "text/csv"
+    return response
+
 
 
 if __name__ == "__main__":
