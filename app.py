@@ -6,13 +6,18 @@ import os
 from io import StringIO
 
 
+# Ensure the instance folder exists
+if not os.path.exists("instance"):
+    os.makedirs("instance")
+
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "devkey")
-# ✅ Use a database inside instance/
+
+# ✅ Correct path with instance folder
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///instance/applications.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# ✅ Fix thread issue for SQLite
+# ✅ Threading fix for gunicorn + SQLite
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
     'connect_args': {'check_same_thread': False}
 }
