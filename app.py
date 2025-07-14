@@ -8,11 +8,15 @@ from io import StringIO
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "devkey")
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///applications.db'
+# ✅ Use a database inside instance/
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///instance/applications.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# ✅ Fix thread issue for SQLite
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
     'connect_args': {'check_same_thread': False}
 }
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 db.init_app(app)
 
 @app.route("/", methods=["GET", "POST"])
