@@ -1,14 +1,14 @@
+import os
+
+# ✅ Ensure instance folder before anything else
+if not os.path.exists("instance"):
+    os.makedirs("instance")
+
 from flask import Flask, make_response, render_template, request, redirect, url_for, flash
 from models import db, Application
 from datetime import datetime
 import csv
-import os
 from io import StringIO
-
-
-# Ensure the instance folder exists
-if not os.path.exists("instance"):
-    os.makedirs("instance")
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "devkey")
